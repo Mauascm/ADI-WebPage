@@ -1,191 +1,126 @@
 "use client";
-
-import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-
-import { ButtonLink } from "@/components/ui/button";
-import { Container } from "@/components/ui/container";
+import { ArrowUpRight, Menu, X } from "lucide-react";
 import { navLinks } from "@/lib/site-content";
-import { cn } from "@/lib/utils";
-
-function isActive(pathname: string, href: string) {
-  if (href === "/") {
-    return pathname === "/";
-  }
-
-  return pathname.startsWith(href);
-}
 
 export function Navbar() {
-  const pathname = usePathname();
+  const path = usePathname();
   const [open, setOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-  const lastScrollY = useRef(0);
-
+  const trigger = useRef<HTMLButtonElement>(null);
+  const menu = useRef<HTMLElement>(null);
   useEffect(() => {
-    let ticking = false;
-
-    const updateVisibility = () => {
-      const currentY = window.scrollY;
-      const delta = currentY - lastScrollY.current;
-
-      if (currentY <= 16) {
-        setIsVisible(true);
-      } else if (delta > 8 && currentY > 96) {
-        setIsVisible(false);
+    if (!open) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
         setOpen(false);
-      } else if (delta < -8) {
-        setIsVisible(true);
+        trigger.current?.focus();
       }
-
-      lastScrollY.current = currentY;
-      ticking = false;
+      if (event.key === "Tab") {
+        const links = menu.current?.querySelectorAll<HTMLAnchorElement>("a");
+        if (!links?.length) return;
+        if (event.shiftKey && document.activeElement === links[0]) {
+          event.preventDefault();
+          trigger.current?.focus();
+        } else if (
+          !event.shiftKey &&
+          document.activeElement === links[links.length - 1]
+        ) {
+          event.preventDefault();
+          trigger.current?.focus();
+        } else if (
+          event.shiftKey &&
+          document.activeElement === trigger.current
+        ) {
+          event.preventDefault();
+          links[links.length - 1].focus();
+        }
+      }
     };
-
-    const onScroll = () => {
-      if (ticking) return;
-
-      ticking = true;
-      window.requestAnimationFrame(updateVisibility);
+    const onResize = () => {
+      if (window.innerWidth >= 1000) setOpen(false);
     };
-
-    lastScrollY.current = window.scrollY;
-    window.addEventListener("scroll", onScroll, { passive: true });
-
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("resize", onResize);
     return () => {
-      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("resize", onResize);
     };
-  }, []);
-
+  }, [open]);
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 transform-gpu transition-transform duration-300 will-change-transform",
-        isVisible ? "translate-y-0" : "-translate-y-full",
-      )}
-    >
-      <Container className="pt-4">
-        <div className="rounded-2xl border border-border/70 bg-bg/70 px-4 py-3 shadow-soft backdrop-blur-xl sm:px-6">
-          <div className="flex items-center justify-between gap-4">
+    <header className="site-header">
+      <div className="nav-wrap wrap">
+        <Link
+          href="/"
+          className="brand"
+          aria-label="ADI — Inicio"
+          onClick={() => setOpen(false)}
+        >
+          <Image
+            src="/branding/adi-logo-noback.png"
+            width={84}
+            height={84}
+            alt="ADI"
+            priority
+          />
+          <span>
+            Advanced Data
+            <br />
+            Intelligence
+          </span>
+        </Link>
+        <nav className="desktop-nav" aria-label="Navegación principal">
+          {navLinks.map((link) => (
             <Link
-              href="/"
-              className="group inline-flex items-center gap-3 rounded-2xl border border-border/60 bg-white/[0.02] px-2 py-1.5 transition hover:border-primary/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              aria-label="Ir al inicio"
-              title="ADI - Advanced Data Intelligence"
+              key={link.href}
+              href={link.href}
+              aria-current={path === link.href ? "page" : undefined}
             >
-              <span className="relative flex h-11 w-14 items-center justify-center overflow-hidden rounded-xl border border-border/70 bg-black/20">
-                <span
-                  className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/15 via-transparent to-transparent"
-                  aria-hidden="true"
-                />
-                <Image
-                  src="/branding/adi-logo-noback.png"
-                  alt=""
-                  fill
-                  sizes="56px"
-                  priority
-                  className="object-contain p-1 drop-shadow-[0_0_14px_rgba(111,220,255,0.22)]"
-                  aria-hidden="true"
-                />
-              </span>
-
-              <span className="flex min-w-0 flex-col">
-                <span className="font-display text-sm tracking-[0.18em] text-fg sm:text-base">ADI</span>
-                <span className="hidden text-[11px] leading-tight text-muted-foreground lg:block">
-                  Advanced Data Intelligence
-                </span>
-              </span>
+              {link.label}
             </Link>
-
-            <nav className="hidden items-center gap-1 lg:flex" aria-label="Navegación principal">
-              {navLinks.map((link) => {
-                const active = isActive(pathname, link.href);
-
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={cn(
-                      "relative rounded-full px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-                      active && "text-fg",
-                    )}
-                  >
-                    {link.label}
-                    <span
-                      className={cn(
-                        "absolute inset-x-3 -bottom-0.5 h-px origin-left scale-x-0 bg-gradient-to-r from-transparent via-primary to-transparent transition-transform duration-300",
-                        active && "scale-x-100",
-                      )}
-                      aria-hidden="true"
-                    />
-                  </Link>
-                );
-              })}
-            </nav>
-
-            <div className="hidden items-center gap-2 xl:flex">
-              <ButtonLink href="/servicios" variant="secondary" size="md">
-                Ver servicios
-              </ButtonLink>
-              <ButtonLink href="/contacto" size="md">
-                Solicitar diagnóstico
-              </ButtonLink>
-            </div>
-
-            <button
-              type="button"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/70 text-fg transition hover:border-primary/60 lg:hidden"
-              onClick={() => setOpen((prev) => !prev)}
-              aria-label={open ? "Cerrar menú" : "Abrir menú"}
-              aria-expanded={open}
-            >
-              {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
-          </div>
-
-          <div
-            className={cn(
-              "grid transition-all duration-300 lg:hidden",
-              open ? "mt-4 grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
-            )}
+          ))}
+        </nav>
+        <Link href="/contacto" className="nav-cta">
+          Conversemos <ArrowUpRight size={16} aria-hidden="true" />
+        </Link>
+        <button
+          ref={trigger}
+          className="menu-trigger"
+          type="button"
+          aria-label={open ? "Cerrar menú" : "Abrir menú"}
+          aria-expanded={open}
+          aria-controls="mobile-nav"
+          onClick={() => setOpen(!open)}
+        >
+          {open ? <X /> : <Menu />}
+        </button>
+      </div>
+      <nav
+        ref={menu}
+        id="mobile-nav"
+        className="mobile-nav"
+        aria-label="Navegación móvil"
+        hidden={!open}
+      >
+        {navLinks.map((link, index) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            onClick={() => setOpen(false)}
+            aria-current={path === link.href ? "page" : undefined}
           >
-            <div className="overflow-hidden">
-              <nav className="space-y-1 border-t border-border/70 pt-3" aria-label="Navegación móvil">
-                {navLinks.map((link) => {
-                  const active = isActive(pathname, link.href);
-
-                  return (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className={cn(
-                        "block rounded-xl px-3 py-2 text-sm text-muted-foreground transition hover:bg-white/5 hover:text-fg",
-                        active && "bg-white/5 text-fg",
-                      )}
-                      onClick={() => setOpen(false)}
-                    >
-                      {link.label}
-                    </Link>
-                  );
-                })}
-
-                <div className="mt-3 flex flex-col gap-2 pb-2">
-                  <ButtonLink href="/servicios" variant="secondary" onClick={() => setOpen(false)}>
-                    Ver servicios
-                  </ButtonLink>
-                  <ButtonLink href="/contacto" onClick={() => setOpen(false)}>
-                    Solicitar diagnóstico
-                  </ButtonLink>
-                </div>
-              </nav>
-            </div>
-          </div>
-        </div>
-      </Container>
+            <span>0{index + 1}</span>
+            {link.label}
+            <ArrowUpRight size={19} aria-hidden="true" />
+          </Link>
+        ))}
+        <Link href="/contacto" onClick={() => setOpen(false)}>
+          Conversemos <ArrowUpRight size={19} aria-hidden="true" />
+        </Link>
+        <p>Datos → Decisiones → Resultados</p>
+      </nav>
     </header>
   );
 }
-

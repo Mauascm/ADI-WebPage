@@ -1,21 +1,8 @@
 "use client";
-
-import { Loader2, Send } from "lucide-react";
-import type { FormEvent } from "react";
-import { useMemo, useState } from "react";
-
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { ArrowUpRight, Loader2 } from "lucide-react";
+import { useRef, useState, type FormEvent } from "react";
+import { objectives } from "@/lib/site-content";
 import { contactConfig } from "@/lib/contact-config";
-
-const objectives = [
-  "Automatización",
-  "KPIs/Dashboards",
-  "Data Science/MLOps",
-  "Web",
-  "Marketing",
-  "Marca",
-];
 
 type FormState = {
   nombre: string;
@@ -24,231 +11,206 @@ type FormState = {
   objetivo: string;
   mensaje: string;
 };
-
-type FormErrors = Partial<Record<keyof FormState, string>>;
-
-const initialForm: FormState = {
+type Errors = Partial<Record<keyof FormState, string>>;
+const emptyForm: FormState = {
   nombre: "",
   empresa: "",
   email: "",
-  objetivo: objectives[0],
+  objetivo: "No estoy seguro todavía",
   mensaje: "",
 };
 
-function validateForm(values: FormState) {
-  const errors: FormErrors = {};
-
-  if (!values.nombre.trim()) {
-    errors.nombre = "Ingresa tu nombre.";
-  }
-
-  if (!values.empresa.trim()) {
-    errors.empresa = "Ingresa el nombre de tu empresa.";
-  }
-
-  if (!values.email.trim()) {
-    errors.email = "Ingresa tu email.";
-  } else if (!/^\S+@\S+\.\S+$/.test(values.email)) {
-    errors.email = "Ingresa un email válido.";
-  }
-
-  if (!values.objetivo.trim()) {
-    errors.objetivo = "Selecciona un objetivo.";
-  }
-
-  if (values.mensaje.trim().length < 20) {
-    errors.mensaje = "Cuéntanos un poco más (mínimo 20 caracteres).";
-  }
-
-  return errors;
-}
-
 export function ContactForm() {
-  const [form, setForm] = useState<FormState>(initialForm);
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [serverMessage, setServerMessage] = useState<string | null>(null);
-
-  const mailtoHref = useMemo(() => {
-    const subject = encodeURIComponent(`Consulta ADI - ${form.objetivo || "Diagnóstico"}`);
-    const body = encodeURIComponent(
-      `Nombre: ${form.nombre}\nEmpresa: ${form.empresa}\nEmail: ${form.email}\nObjetivo: ${form.objetivo}\n\nMensaje:\n${form.mensaje}`,
-    );
-
-    // Reemplazar este correo por el email oficial de recepción.
-    return `mailto:${contactConfig.email}?subject=${subject}&body=${body}`;
-  }, [form]);
-
-  const handleChange = <K extends keyof FormState>(key: K, value: FormState[K]) => {
-    setForm((prev) => ({ ...prev, [key]: value }));
-    setErrors((prev) => ({ ...prev, [key]: undefined }));
-    setServerMessage(null);
+  const [values, setValues] = useState(emptyForm);
+  const [errors, setErrors] = useState<Errors>({});
+  const [pending, setPending] = useState(false);
+  const [status, setStatus] = useState<{ ok: boolean; message: string } | null>(
+    null,
+  );
+  const formRef = useRef<HTMLFormElement>(null);
+  const update = (field: keyof FormState, value: string) => {
+    setValues((old) => ({ ...old, [field]: value }));
+    setErrors((old) => ({ ...old, [field]: undefined }));
+    setStatus(null);
   };
-
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const mailto = `mailto:${contactConfig.email}?subject=${encodeURIComponent("Consulta ADI — " + values.objetivo)}&body=${encodeURIComponent(`Nombre: ${values.nombre}\nEmpresa: ${values.empresa}\nEmail: ${values.email}\n\n${values.mensaje}`)}`;
+  async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
-    const validationErrors = validateForm(form);
-    setErrors(validationErrors);
-
-    if (Object.keys(validationErrors).length > 0) {
+    if (pending) return;
+    const nextErrors: Errors = {};
+    if (!values.nombre.trim()) nextErrors.nombre = "Ingresa tu nombre.";
+    if (!values.empresa.trim()) nextErrors.empresa = "Ingresa tu empresa.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim()))
+      nextErrors.email = "Ingresa un email válido.";
+    if (values.mensaje.trim().length < 20)
+      nextErrors.mensaje = "Cuéntanos un poco más (mínimo 20 caracteres).";
+    setErrors(nextErrors);
+    setStatus(null);
+    const first = Object.keys(nextErrors)[0];
+    if (first) {
+      formRef.current?.querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
       return;
     }
-
-    setIsSubmitting(true);
-
+    setPending(true);
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+        signal: AbortSignal.timeout(15000),
       });
-
-      if (!response.ok) {
-        throw new Error("No se pudo enviar el formulario.");
-      }
-
-      const data = (await response.json()) as { message: string };
-      setServerMessage(data.message);
-      setForm(initialForm);
+      const data = (await response.json()) as {
+        message?: string;
+        delivered?: boolean;
+      };
+      const ok = response.ok && data.delivered === true;
+      setStatus({
+        ok,
+        message:
+          data.message ||
+          "No pudimos enviar tu mensaje. Intenta de nuevo o usa el correo directo.",
+      });
+      if (ok) setValues(emptyForm);
     } catch {
-      setServerMessage("No pudimos enviar tu mensaje ahora. Puedes usar el correo directo.");
+      setStatus({
+        ok: false,
+        message:
+          "No pudimos confirmar el envío. Conservamos tu mensaje; puedes intentar de nuevo o enviarlo por correo directo.",
+      });
     } finally {
-      setIsSubmitting(false);
+      setPending(false);
     }
-  };
-
+  }
   return (
-    <Card className="w-full p-6 sm:p-8">
-      <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-        <div className="grid gap-5 sm:grid-cols-2">
-          <Field
-            id="nombre"
-            label="Nombre"
-            value={form.nombre}
-            onChange={(value) => handleChange("nombre", value)}
-            placeholder="Tu nombre"
-            error={errors.nombre}
-          />
-          <Field
-            id="empresa"
-            label="Empresa"
-            value={form.empresa}
-            onChange={(value) => handleChange("empresa", value)}
-            placeholder="Nombre de tu empresa"
-            error={errors.empresa}
-          />
-        </div>
-
-        <Field
-          id="email"
-          type="email"
-          label="Email"
-          value={form.email}
-          onChange={(value) => handleChange("email", value)}
-          placeholder="nombre@empresa.com"
-          error={errors.email}
-        />
-
-        <div className="space-y-1.5">
-          <label htmlFor="objetivo" className="text-sm font-medium text-fg">
-            Objetivo principal
-          </label>
-          <select
-            id="objetivo"
-            name="objetivo"
-            value={form.objetivo}
-            onChange={(event) => handleChange("objetivo", event.target.value)}
-            className="h-12 w-full rounded-xl border border-border/70 bg-black/25 px-4 text-sm text-fg outline-none transition focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/40"
+    <form
+      className="contact-form"
+      ref={formRef}
+      onSubmit={submit}
+      noValidate
+      aria-busy={pending}
+    >
+      <div className="form-heading">
+        <span className="micro">TU PRIMERA PRIORIDAD</span>
+        <span>Todos los campos son necesarios</span>
+      </div>
+      <div className="form-grid">
+        {(
+          [
+            {
+              id: "nombre",
+              label: "Nombre",
+              placeholder: "Tu nombre",
+              autocomplete: "name",
+            },
+            {
+              id: "empresa",
+              label: "Empresa",
+              placeholder: "Tu organización",
+              autocomplete: "organization",
+            },
+            {
+              id: "email",
+              label: "Email de contacto",
+              placeholder: "nombre@empresa.com",
+              autocomplete: "email",
+            },
+          ] as const
+        ).map((field) => (
+          <div
+            className={field.id === "email" ? "field field-full" : "field"}
+            key={field.id}
           >
-            {objectives.map((item) => (
-              <option key={item} value={item} className="bg-slate-900 text-fg">
-                {item}
-              </option>
-            ))}
-          </select>
-          {errors.objetivo ? <p className="text-sm text-red-300">{errors.objetivo}</p> : null}
-        </div>
-
-        <div className="space-y-1.5">
-          <label htmlFor="mensaje" className="text-sm font-medium text-fg">
-            Mensaje
-          </label>
-          <textarea
-            id="mensaje"
-            name="mensaje"
-            value={form.mensaje}
-            onChange={(event) => handleChange("mensaje", event.target.value)}
-            placeholder="Cuéntanos el contexto, los dolores actuales y qué quieres lograr."
-            rows={5}
-            className="w-full rounded-xl border border-border/70 bg-black/25 px-4 py-3 text-sm text-fg outline-none transition focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/40"
-          />
-          {errors.mensaje ? <p className="text-sm text-red-300">{errors.mensaje}</p> : null}
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3">
-          <Button type="submit" size="lg" disabled={isSubmitting}>
-            {isSubmitting ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin" />
-                Enviando...
-              </>
-            ) : (
-              <>
-                <Send className="h-4 w-4" />
-                Enviar solicitud
-              </>
+            <label htmlFor={field.id}>{field.label}</label>
+            <input
+              id={field.id}
+              name={field.id}
+              type={field.id === "email" ? "email" : "text"}
+              autoComplete={field.autocomplete}
+              value={values[field.id]}
+              maxLength={field.id === "email" ? 254 : 150}
+              required
+              placeholder={field.placeholder}
+              onChange={(event) => update(field.id, event.target.value)}
+              aria-invalid={!!errors[field.id]}
+              aria-describedby={
+                errors[field.id] ? `${field.id}-error` : undefined
+              }
+            />
+            {errors[field.id] && (
+              <p className="field-error" id={`${field.id}-error`}>
+                {errors[field.id]}
+              </p>
             )}
-          </Button>
-
-          <a
-            href={mailtoHref}
-            className="inline-flex h-12 items-center rounded-full border border-border/80 px-6 text-sm text-muted-foreground transition hover:border-primary/60 hover:text-primary"
-          >
-            Enviar por correo directo
-          </a>
-        </div>
-
-        {serverMessage ? <p className="text-sm text-primary">{serverMessage}</p> : null}
-      </form>
-    </Card>
-  );
-}
-
-type FieldProps = {
-  id: string;
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  placeholder?: string;
-  error?: string;
-  type?: string;
-};
-
-function Field({ id, label, value, onChange, placeholder, error, type = "text" }: FieldProps) {
-  return (
-    <div className="space-y-1.5">
-      <label htmlFor={id} className="text-sm font-medium text-fg">
-        {label}
-      </label>
-      <input
-        id={id}
-        name={id}
-        type={type}
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        placeholder={placeholder}
-        className="h-12 w-full rounded-xl border border-border/70 bg-black/25 px-4 text-sm text-fg outline-none transition focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/40"
-        aria-invalid={Boolean(error)}
-        aria-describedby={error ? `${id}-error` : undefined}
-      />
-      {error ? (
-        <p id={`${id}-error`} className="text-sm text-red-300">
-          {error}
+          </div>
+        ))}
+      </div>
+      <div className="field">
+        <label htmlFor="objetivo">¿Qué te gustaría explorar?</label>
+        <select
+          id="objetivo"
+          name="objetivo"
+          value={values.objetivo}
+          onChange={(event) => update("objetivo", event.target.value)}
+          required
+        >
+          {objectives.map((option) => (
+            <option key={option}>{option}</option>
+          ))}
+        </select>
+      </div>
+      <div className="field">
+        <label htmlFor="mensaje">Cuéntanos el contexto</label>
+        <textarea
+          id="mensaje"
+          name="mensaje"
+          rows={5}
+          required
+          minLength={20}
+          maxLength={5000}
+          value={values.mensaje}
+          placeholder="¿Qué decisión o proceso quieres mejorar? ¿Qué lo hace difícil hoy?"
+          onChange={(event) => update("mensaje", event.target.value)}
+          aria-invalid={!!errors.mensaje}
+          aria-describedby={
+            errors.mensaje ? "mensaje-error mensaje-help" : "mensaje-help"
+          }
+        />
+        <span className="field-help" id="mensaje-help">
+          Comparte un contexto general, sin datos sensibles ni confidenciales.
+        </span>
+        {errors.mensaje && (
+          <p className="field-error" id="mensaje-error">
+            {errors.mensaje}
+          </p>
+        )}
+      </div>
+      <button className="button form-submit" type="submit" disabled={pending}>
+        {pending ? (
+          <>
+            Enviando <Loader2 size={17} className="spin" aria-hidden="true" />
+          </>
+        ) : (
+          <>
+            Enviar mensaje <ArrowUpRight size={17} aria-hidden="true" />
+          </>
+        )}
+      </button>
+      {status && (
+        <p
+          className={`form-status ${status.ok ? "success" : ""}`}
+          role="status"
+          aria-live="polite"
+        >
+          {status.message}
         </p>
-      ) : null}
-    </div>
+      )}
+      <a href={mailto} className="form-mailto">
+        Prefiero enviarlo desde mi correo{" "}
+        <ArrowUpRight size={15} aria-hidden="true" />
+      </a>
+      <p className="field-help">
+        Usaremos los datos que compartas para atender tu consulta.
+      </p>
+    </form>
   );
 }

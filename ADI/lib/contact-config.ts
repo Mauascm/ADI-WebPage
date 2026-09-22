@@ -5,4 +5,3 @@ export const contactConfig = {
 };
 
 export const contactMailto = `mailto:${contactConfig.email}`;
-
