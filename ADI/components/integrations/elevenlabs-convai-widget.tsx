@@ -1,20 +1,15 @@
 import Script from "next/script";
 import { createElement } from "react";
-
-const ELEVENLABS_AGENT_ID = "agent_3201kj6qzcgjfc8sj91gzz0m0jtg";
-
 export function ElevenLabsConvaiWidget() {
+  const agentId = process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID;
+  if (!agentId) return null;
   return (
     <>
-      {createElement("elevenlabs-convai", {
-        "agent-id": ELEVENLABS_AGENT_ID,
-      })}
+      {createElement("elevenlabs-convai", { "agent-id": agentId })}
       <Script
         src="https://unpkg.com/@elevenlabs/convai-widget-embed"
-        strategy="afterInteractive"
-        type="text/javascript"
+        strategy="lazyOnload"
       />
     </>
   );
 }
-
