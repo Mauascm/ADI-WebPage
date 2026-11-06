@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { useState } from "react";
 import { ArrowRight, Database, Layers3, Workflow } from "lucide-react";
 import { businessCases } from "@/lib/site-content";
@@ -44,10 +45,8 @@ export function OfficeSystem() {
         </div>
         <div className="system-core">
           <div className="core-title">
-            <Layers3 size={22} aria-hidden="true" />
-            <span>
-              ADI<span>DATA & AI OFFICE</span>
-            </span>
+            <Image src="/branding/adi-logo-header.svg" width={154} height={49} alt="ADI" />
+            <Layers3 size={20} className="core-layers" aria-hidden="true" />
             <span className="core-cross" aria-hidden="true">
               +
             </span>

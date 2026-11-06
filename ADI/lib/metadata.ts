@@ -25,10 +25,10 @@ export function buildMetadata({
       type: "website",
       images: [
         {
-          url: "/opengraph-image",
+          url: "/branding/adi-social.png",
           width: 1200,
           height: 630,
-          alt: "ADI — Tu equipo de Datos + IA",
+          alt: "ADI — Data & AI Office",
         },
       ],
     },
@@ -36,7 +36,7 @@ export function buildMetadata({
       card: "summary_large_image",
       title,
       description,
-      images: ["/opengraph-image"],
+      images: ["/branding/adi-social.png"],
     },
   };
 }

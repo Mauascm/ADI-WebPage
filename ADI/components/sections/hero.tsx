@@ -1,26 +1,41 @@
+import Image from "next/image";
 import { ArrowDown } from "lucide-react";
 import { ActionLink, Eyebrow } from "@/components/ui/editorial";
 import { OfficeSystem } from "@/components/visuals/office-system";
 export function Hero() {
   return (
     <section className="hero wrap">
-      <div className="hero-heading">
-        <Eyebrow>ADI — DATA & AI OFFICE</Eyebrow>
-        <h1>
-          Tu equipo de <span className="hero-emphasis">Datos + IA.</span>
-          <br />
-          <span>Sin construirlo desde cero.</span>
-        </h1>
-        <p>
-          Tu equipo externo de Datos e IA, integrado a tu negocio.
-          <br className="desktop-break" /> Conectamos tu información con las
-          decisiones que importan.
-        </p>
-        <div className="hero-actions">
-          <ActionLink href="/contacto">Conversemos</ActionLink>
-          <ActionLink href="/data-ai-office" secondary>
-            Cómo funciona
-          </ActionLink>
+      <div className="hero-stage">
+        <div className="hero-heading">
+          <Eyebrow>ADI — DATA & AI OFFICE</Eyebrow>
+          <h1>
+            Tu equipo de <span className="hero-emphasis">Datos + IA.</span>
+            <br />
+            <span>Sin construirlo desde cero.</span>
+          </h1>
+          <p>
+            Tu equipo externo de Datos e IA, integrado a tu negocio.
+            <br className="desktop-break" /> Conectamos tu información con las
+            decisiones que importan.
+          </p>
+          <div className="hero-actions">
+            <ActionLink href="/contacto">Conversemos</ActionLink>
+            <ActionLink href="/data-ai-office" secondary>
+              Cómo funciona
+            </ActionLink>
+          </div>
+        </div>
+        <div className="hero-visual" aria-hidden="true">
+          <span className="visual-index">ADI / SISTEMA 01</span>
+          <span className="visual-orbit visual-orbit-one" />
+          <span className="visual-orbit visual-orbit-two" />
+          <span className="visual-node visual-node-one" />
+          <span className="visual-node visual-node-two" />
+          <span className="visual-node visual-node-three" />
+          <div className="visual-symbol">
+            <Image src="/branding/adi-symbol-yellow.svg" width={210} height={210} alt="" />
+          </div>
+          <span className="visual-caption">DATOS <b>→</b> CRITERIO <b>→</b> ACCIÓN</span>
         </div>
       </div>
       <OfficeSystem />

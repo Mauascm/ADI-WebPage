@@ -59,17 +59,12 @@ export function Navbar() {
           onClick={() => setOpen(false)}
         >
           <Image
-            src="/branding/adi-logo-noback.png"
-            width={84}
-            height={84}
+            src="/branding/adi-logo-header.svg"
+            width={356}
+            height={112}
             alt="ADI"
             priority
           />
-          <span>
-            Advanced Data
-            <br />
-            Intelligence
-          </span>
         </Link>
         <nav className="desktop-nav" aria-label="Navegación principal">
           {navLinks.map((link) => (

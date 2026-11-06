@@ -57,9 +57,11 @@ for (const [old, destination] of [
 for (const path of [
   "/robots.txt",
   "/sitemap.xml",
-  "/opengraph-image",
-  "/branding/adi-logo-noback.png",
-  "/branding/adi-logo-vec.svg",
+  "/opengraph-image.png",
+  "/branding/adi-logo-header.svg",
+  "/branding/adi-logo-dark.svg",
+  "/branding/favicon.svg",
+  "/branding/manifest.webmanifest",
 ]) {
   assert.equal((await fetch(base + path)).status, 200, path);
 }

@@ -13,16 +13,11 @@ export function Footer() {
             aria-label="ADI — Inicio"
           >
             <Image
-              src="/branding/adi-logo-noback.png"
-              width={100}
-              height={100}
-              alt="ADI"
+              src="/branding/adi-logo-dark.svg"
+              width={356}
+              height={136}
+              alt="ADI — Data & AI Office"
             />
-            <span>
-              Advanced Data
-              <br />
-              Intelligence
-            </span>
           </Link>
           <p>
             La capacidad detrás de
