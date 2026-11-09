@@ -40,7 +40,7 @@ export function Navbar() {
       }
     };
     const onResize = () => {
-      if (window.innerWidth >= 1000) setOpen(false);
+      if (window.innerWidth >= 1151) setOpen(false);
     };
     window.addEventListener("keydown", onKey);
     window.addEventListener("resize", onResize);

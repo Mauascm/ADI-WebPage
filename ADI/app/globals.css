@@ -3156,3 +3156,8 @@ h2 > span {
     animation: none;
   }
 }
+@media (max-width: 1150px) {
+  .desktop-nav { display: none; }
+  .menu-trigger { display: flex; }
+  .nav-cta { margin-left: auto; }
+}

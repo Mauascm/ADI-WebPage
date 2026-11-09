@@ -1,6 +1,6 @@
 "use client";
 import { ArrowUpRight, Loader2 } from "lucide-react";
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { objectives } from "@/lib/site-content";
 import { contactConfig } from "@/lib/contact-config";
 
@@ -22,6 +22,18 @@ const emptyForm: FormState = {
 
 export function ContactForm() {
   const [values, setValues] = useState(emptyForm);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("objetivo") !== "Capacitación") return;
+    const program = params.get("programa")?.trim().slice(0, 120);
+    setValues((current) => ({
+      ...current,
+      objetivo: "Capacitación",
+      mensaje: program
+        ? `Quiero información sobre el programa de capacitación: ${program}.`
+        : current.mensaje,
+    }));
+  }, []);
   const [errors, setErrors] = useState<Errors>({});
   const [pending, setPending] = useState(false);
   const [status, setStatus] = useState<{ ok: boolean; message: string } | null>(

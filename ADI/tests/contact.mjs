@@ -54,6 +54,12 @@ try {
   const unavailable = await post(running.base, valid);
   assert.equal(unavailable.status, 503);
   assert.equal(unavailable.body.delivered, false);
+  const trainingInquiry = await post(running.base, {
+    ...valid,
+    objetivo: "Capacitación",
+    mensaje: "Quiero información sobre capacitación para mi equipo de trabajo.",
+  });
+  assert.equal(trainingInquiry.status, 503, "Capacitación must be a valid objective");
   await stop(running.child);
   running = await launch(mockUrl);
   for (const body of ["{", null, [], {}, { ...valid, nombre: 4 }, { ...valid, empresa: "   " }, { ...valid, email: "bad" }, { ...valid, mensaje: "corto" }, { ...valid, objetivo: "Marketing" }, { ...valid, mensaje: "a".repeat(5001) }]) {

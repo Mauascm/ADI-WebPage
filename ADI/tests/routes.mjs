@@ -7,6 +7,7 @@ const routes = [
   "/capacidades",
   "/modelo",
   "/experiencia",
+  "/capacitacion",
   "/contacto",
 ];
 const links = new Set();
