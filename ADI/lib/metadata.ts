@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 export const siteUrl = (
-  process.env.NEXT_PUBLIC_SITE_URL || "https://adi-data.vercel.app"
+  process.env.NEXT_PUBLIC_SITE_URL || "https://adi-web-page.vercel.app"
 ).replace(/\/$/, "");
 export function buildMetadata({
   title,

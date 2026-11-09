@@ -25,6 +25,7 @@ Se conserva Next.js App Router, TypeScript, Tailwind y el despliegue estándar d
 | `/capacidades` | Ocho disciplinas con relevancia de negocio |
 | `/modelo` | Priorización, sprints, capacidad finita y conocimiento acumulado |
 | `/experiencia` | Escenarios ilustrativos, sin atribuciones o métricas inventadas |
+| `/capacitacion` | Rutas y programas de formación en IA y datos |
 | `/contacto` | Captura de contacto y correo directo |
 
 Redirecciones permanentes 308: `/servicios` → `/capacidades`; `/metodologia` → `/modelo`. Incluye canonical por página, OpenGraph, imagen social, Organization JSON-LD, robots y sitemap.
@@ -33,7 +34,7 @@ Redirecciones permanentes 308: `/servicios` → `/capacidades`; `/metodologia` �
 
 Copiar `.env.example` a `.env.local` y definir según el entorno:
 
-- `NEXT_PUBLIC_SITE_URL`: dominio público definitivo para canonical, sitemap y metadata. El fallback conserva `https://adi-data.vercel.app`.
+- `NEXT_PUBLIC_SITE_URL`: dominio público definitivo para canonical, sitemap y metadata. El fallback usa `https://adi-web-page.vercel.app`.
 - `CONTACT_WEBHOOK_URL`: endpoint privado que recibe el formulario. Debe persistir o gestionar el contacto antes de responder con éxito. Sin configuración, la API devuelve 503 y la interfaz indica que el mensaje no fue enviado.
 - `NEXT_PUBLIC_ADI_CALENDAR_URL`: calendario opcional. El enlace se muestra únicamente si hay URL.
 - `NEXT_PUBLIC_ELEVENLABS_AGENT_ID`: integración de voz opcional. Revisar previamente que el agente tenga el posicionamiento actualizado. Sin esta variable, no carga scripts externos de ElevenLabs.
