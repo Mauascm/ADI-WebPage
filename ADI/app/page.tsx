@@ -1,5 +1,6 @@
 import { Hero } from "@/components/sections/hero";
 import { CTASection } from "@/components/sections/cta-section";
+import { PlansPreview } from "@/components/sections/plans-preview";
 import {
   ProblemSection,
   TeamSection,
@@ -29,6 +30,7 @@ export default function HomePage() {
       <ModelSection />
       <AISection />
       <ExperienceSection />
+      <PlansPreview />
       <CTASection />
     </>
   );

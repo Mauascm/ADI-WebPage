@@ -5,6 +5,7 @@ import {
   ContinuitySection,
 } from "@/components/sections/office-story";
 import { CTASection } from "@/components/sections/cta-section";
+import { PlansPreview } from "@/components/sections/plans-preview";
 import { buildMetadata } from "@/lib/metadata";
 export const metadata = buildMetadata({
   title: "Data & AI Office | ADI",
@@ -105,6 +106,7 @@ export default function OfficePage() {
           </ul>
         </div>
       </section>
+      <PlansPreview />
       <CTASection />
     </>
   );

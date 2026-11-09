@@ -4,6 +4,7 @@ export const navLinks = [
   { href: "/modelo", label: "Modelo" },
   { href: "/experiencia", label: "Experiencia" },
   { href: "/capacitacion", label: "Capacitación" },
+  { href: "/planes", label: "Planes" },
 ];
 
 export const capabilities = [
@@ -205,5 +206,6 @@ export const objectives = [
   "AI / Machine Learning",
   "Automatización",
   "Capacitación",
+  "AI Governance / Compliance",
   "No estoy seguro todavía",
 ];

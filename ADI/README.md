@@ -26,6 +26,7 @@ Se conserva Next.js App Router, TypeScript, Tailwind y el despliegue estándar d
 | `/modelo` | Priorización, sprints, capacidad finita y conocimiento acumulado |
 | `/experiencia` | Escenarios ilustrativos, sin atribuciones o métricas inventadas |
 | `/capacitacion` | Rutas y programas de formación en IA y datos |
+| `/planes` | Bandas mensuales, comparativa y AI Governance & Compliance |
 | `/contacto` | Captura de contacto y correo directo |
 
 Redirecciones permanentes 308: `/servicios` → `/capacidades`; `/metodologia` → `/modelo`. Incluye canonical por página, OpenGraph, imagen social, Organization JSON-LD, robots y sitemap.

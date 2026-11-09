@@ -24,14 +24,23 @@ export function ContactForm() {
   const [values, setValues] = useState(emptyForm);
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get("objetivo") !== "Capacitación") return;
+    const objective = params.get("objetivo");
+    if (!objective || !objectives.includes(objective)) return;
     const program = params.get("programa")?.trim().slice(0, 120);
+    const plan = params.get("plan")?.trim().slice(0, 60);
+    const validPlan = plan && ["Essential", "Growth", "Intelligence", "AI", "Enterprise"].includes(plan);
+    const message =
+      objective === "Capacitación" && program
+        ? `Quiero información sobre el programa de capacitación: ${program}.`
+        : objective === "Data & AI Office" && validPlan
+          ? `Quiero información sobre el plan ADI ${plan}, sus capacidades y el alcance para mi empresa.`
+          : objective === "AI Governance / Compliance"
+            ? "Quiero información sobre la consultoría independiente de AI Governance & Legal Compliance para mi empresa."
+            : "";
     setValues((current) => ({
       ...current,
-      objetivo: "Capacitación",
-      mensaje: program
-        ? `Quiero información sobre el programa de capacitación: ${program}.`
-        : current.mensaje,
+      objetivo: objective,
+      mensaje: message || current.mensaje,
     }));
   }, []);
   const [errors, setErrors] = useState<Errors>({});
