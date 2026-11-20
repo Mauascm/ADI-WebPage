@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "name": "adi-materiales-comerciales",
+  "scripts": {
+    "build:pptx": "node build-pptx.cjs"
+  },
+  "dependencies": {
+    "pptxgenjs": "^4.0.1"
+  }
+}

@@ -20,7 +20,7 @@ export function PlansPreview() {
       <Link href="/planes" className="plans-preview-link">
         <span>
           <small>DESDE</small>
-          <strong>$50,000 MXN</strong>
+          <strong>$70,000 MXN</strong>
           <small>+ IVA / MES</small>
         </span>
         <span>

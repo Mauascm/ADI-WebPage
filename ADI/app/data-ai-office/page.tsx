@@ -92,18 +92,12 @@ export default function OfficePage() {
               Integra la capacidad.
             </h2>
           </div>
-          <ul className="editorial-list">
-            <li>Tu información vive en varios sistemas y áreas.</li>
-            <li>Los reportes dependen de conciliación manual.</li>
-            <li>
-              TI sostiene la operación, pero falta capacidad especializada en
-              datos.
-            </li>
-            <li>
-              Quieres llevar analítica o IA a la práctica con una base
-              confiable.
-            </li>
-          </ul>
+          <div className="fit-quadrants" aria-label="Cuatro situaciones en las que ADI puede ayudar">
+            <div><span className="micro">01 / DATOS</span><strong>Información dispersa</strong><p>Vive en varios sistemas y áreas.</p></div>
+            <div><span className="micro">02 / REPORTES</span><strong>Trabajo manual</strong><p>Conciliar versiones consume tiempo.</p></div>
+            <div><span className="micro">03 / EQUIPO</span><strong>Capacidad especializada</strong><p>TI sostiene la operación; faltan perfiles de datos.</p></div>
+            <div><span className="micro">04 / SIGUIENTE PASO</span><strong>IA con base confiable</strong><p>Quieres llevar analítica o IA a la práctica.</p></div>
+          </div>
         </div>
       </section>
       <PlansPreview />

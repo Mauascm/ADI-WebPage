@@ -1,31 +1,31 @@
 export const plans = [
   {
     name: "Essential",
-    range: "$50,000 – $79,000",
-    summary: "Ordena tus datos y convierte la información en decisiones claras.",
-    highlights: ["Business Intelligence y dashboards", "Hasta 2 fuentes de datos", "1 área de negocio"],
+    price: "$70,000",
+    summary: "Ordena tus datos, automatiza procesos y convierte información en decisiones claras.",
+    highlights: ["Business Intelligence y dashboards", "Automatización de procesos", "Hasta 2 fuentes de datos"],
   },
   {
     name: "Growth",
-    range: "$80,000 – $139,000",
-    summary: "Integra información y automatiza procesos para ganar eficiencia.",
-    highlights: ["Integración de datos intermedia", "Hasta 4 fuentes de datos", "2 áreas de negocio"],
+    price: "$135,000",
+    summary: "Integra información y suma analítica avanzada para decidir con más contexto.",
+    highlights: ["Integración de datos intermedia", "Analítica avanzada", "Hasta 4 fuentes de datos"],
   },
   {
     name: "Intelligence",
-    range: "$140,000 – $219,000",
+    price: "$219,000",
     summary: "Anticipa escenarios y suma gobierno de datos e IA con consultoría regulatoria.",
     highlights: ["Analítica avanzada y forecasting", "AI Governance & Compliance", "Hasta 6 fuentes de datos"],
   },
   {
     name: "AI",
-    range: "$220,000 – $319,000",
+    price: "$319,000",
     summary: "Implementa soluciones de IA y controles técnicos para operarlas con criterio.",
     highlights: ["Machine Learning y agentes", "Controles técnicos de gobernanza", "Hasta 10 fuentes de datos"],
   },
   {
     name: "Enterprise",
-    range: "Cotización personalizada",
+    price: "A medida",
     summary: "Diseñamos la capacidad completa según tu arquitectura, operación y objetivos.",
     highlights: ["Arquitectura y alcance propios", "Capacidad ajustada a tu contexto", "Acompañamiento integral"],
   },
@@ -52,8 +52,8 @@ export const comparisonGroups: { title: string; rows: ComparisonRow[] }[] = [
   {
     title: "Analítica, automatización e IA",
     rows: [
-      { label: "Automatización de procesos", values: ["—", "Incluido", "Incluido", "Incluido", "A medida"] },
-      { label: "Analítica avanzada", values: ["—", "—", "Incluido", "Incluido", "A medida"] },
+      { label: "Automatización de procesos", values: ["Incluido", "Incluido", "Incluido", "Incluido", "A medida"] },
+      { label: "Analítica avanzada", values: ["—", "Incluido", "Incluido", "Incluido", "A medida"] },
       { label: "Forecasting y modelos predictivos", values: ["—", "—", "Incluido", "Incluido", "A medida"] },
       { label: "Machine Learning personalizado", values: ["—", "—", "—", "Incluido", "A medida"] },
       { label: "IA generativa y agentes inteligentes", values: ["—", "—", "—", "Incluido", "A medida"] },

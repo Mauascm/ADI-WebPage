@@ -2,7 +2,7 @@ import { PageIntro, Eyebrow } from "@/components/ui/editorial";
 import { ContactForm } from "@/components/contact/contact-form";
 import { contactConfig, contactMailto } from "@/lib/contact-config";
 import { buildMetadata } from "@/lib/metadata";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, CalendarDays } from "lucide-react";
 export const metadata = buildMetadata({
   title: "Conversemos sobre tu primera prioridad | ADI",
   description:
@@ -43,22 +43,27 @@ export default function ContactPage() {
               <span>03</span>Un siguiente paso que tenga sentido.
             </li>
           </ol>
+          {contactConfig.calendarUrl && (
+            <a
+              className="calendar-booking"
+              href={contactConfig.calendarUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <CalendarDays size={25} aria-hidden="true" />
+              <span>
+                <strong>Agendar una llamada</strong>
+                <small>Elige un horario en Google Calendar</small>
+              </span>
+              <ArrowUpRight size={20} aria-hidden="true" />
+            </a>
+          )}
           <div className="contact-direct">
             <span className="micro">TAMBIÉN PUEDES ESCRIBIRNOS</span>
             <a href={contactMailto}>
               {contactConfig.email}
               <ArrowUpRight size={17} aria-hidden="true" />
             </a>
-            {contactConfig.calendarUrl && (
-              <a
-                href={contactConfig.calendarUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Agendar una conversación
-                <ArrowUpRight size={17} aria-hidden="true" />
-              </a>
-            )}
           </div>
         </aside>
         <ContactForm />

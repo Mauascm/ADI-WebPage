@@ -67,11 +67,12 @@ export default function PlansPage() {
             <h2>Un modelo. Distintas escalas.</h2>
           </div>
           <p>
-            Cuatro bandas mensuales definidas y una solución Enterprise
+            Cuatro precios mensuales definidos y una solución Enterprise
             diseñada para tu contexto.
           </p>
         </div>
-        <div className="plans-grid">
+        <p className="plans-swipe-hint">Desliza para comparar los cinco planes <span aria-hidden="true">→</span></p>
+        <div className="plans-grid" role="region" aria-label="Cinco planes de Data & AI Office" tabIndex={0}>
           {plans.map((plan, index) => (
             <article
               className={`plan-card ${plan.name === "Intelligence" ? "plan-card-featured" : ""}`}
@@ -84,8 +85,8 @@ export default function PlansPage() {
               <h3>ADI {plan.name}</h3>
               <p className="plan-card-summary">{plan.summary}</p>
               <div className="plan-card-price">
-                <span>{plan.name === "Enterprise" ? "INVERSIÓN" : "BANDA MENSUAL"}</span>
-                <strong>{plan.range}</strong>
+                <span>{plan.name === "Enterprise" ? "INVERSIÓN" : "PRECIO MENSUAL"}</span>
+                <strong>{plan.price}</strong>
                 {plan.name !== "Enterprise" && <small>MXN + IVA / mes</small>}
               </div>
               <ul>
@@ -103,7 +104,7 @@ export default function PlansPage() {
           ))}
         </div>
         <p className="plans-price-note">
-          Precios en MXN más IVA. Las bandas, límites de fuentes y áreas son una
+          Precios en MXN más IVA. Los límites de fuentes y áreas son una
           referencia comercial; el alcance, la complejidad y las condiciones se
           definen en cada contrato. Las capacidades no implican desarrollos
           ilimitados.
@@ -152,11 +153,38 @@ export default function PlansPage() {
               ))}
             </table>
           </div>
+          <div className="plans-mobile-compare" aria-label="Comparativa de capacidades por plan">
+            {plans.map((plan, planIndex) => (
+              <details key={plan.name} open={planIndex === 0}>
+                <summary>
+                  <span>ADI {plan.name}</span>
+                  <strong>{plan.price}</strong>
+                  <span className="plans-mobile-plus" aria-hidden="true">+</span>
+                </summary>
+                <div className="plans-mobile-compare-body">
+                  {comparisonGroups.map((group) => (
+                    <div key={group.title}>
+                      <h3>{group.title}</h3>
+                      <dl>
+                        {group.rows
+                          .filter((row) => row.values[planIndex] !== "—")
+                          .map((row) => (
+                            <div key={row.label}>
+                              <dt>{row.label}</dt>
+                              <dd>{row.values[planIndex]}</dd>
+                            </div>
+                          ))}
+                      </dl>
+                    </div>
+                  ))}
+                </div>
+              </details>
+            ))}
+          </div>
           <p className="plans-table-note">
             “Incluido” indica una capacidad disponible dentro del alcance
             contratado; su volumen y entregables se acuerdan según la
-            complejidad de cada iniciativa. Desliza la tabla en pantallas
-            pequeñas.
+            complejidad de cada iniciativa.
           </p>
         </div>
       </section>

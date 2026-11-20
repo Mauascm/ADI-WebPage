@@ -26,7 +26,7 @@ Se conserva Next.js App Router, TypeScript, Tailwind y el despliegue estándar d
 | `/modelo` | Priorización, sprints, capacidad finita y conocimiento acumulado |
 | `/experiencia` | Escenarios ilustrativos, sin atribuciones o métricas inventadas |
 | `/capacitacion` | Rutas y programas de formación en IA y datos |
-| `/planes` | Bandas mensuales, comparativa y AI Governance & Compliance |
+| `/planes` | Precios mensuales fijos, comparativa y AI Governance & Compliance |
 | `/contacto` | Captura de contacto y correo directo |
 
 Redirecciones permanentes 308: `/servicios` → `/capacidades`; `/metodologia` → `/modelo`. Incluye canonical por página, OpenGraph, imagen social, Organization JSON-LD, robots y sitemap.
@@ -37,7 +37,7 @@ Copiar `.env.example` a `.env.local` y definir según el entorno:
 
 - `NEXT_PUBLIC_SITE_URL`: dominio público definitivo para canonical, sitemap y metadata. El fallback usa `https://adi-web-page.vercel.app`.
 - `CONTACT_WEBHOOK_URL`: endpoint privado que recibe el formulario. Debe persistir o gestionar el contacto antes de responder con éxito. Sin configuración, la API devuelve 503 y la interfaz indica que el mensaje no fue enviado.
-- `NEXT_PUBLIC_ADI_CALENDAR_URL`: calendario opcional. El enlace se muestra únicamente si hay URL.
+- `NEXT_PUBLIC_ADI_CALENDAR_URL`: URL pública de la página de reservas de Google Calendar. Al configurarla se muestra el botón **Agendar una llamada** en `/contacto`. Ver [cómo recuperar el enlace](docs/GOOGLE_CALENDAR_BOOKING.md).
 - `NEXT_PUBLIC_ELEVENLABS_AGENT_ID`: integración de voz opcional. Revisar previamente que el agente tenga el posicionamiento actualizado. Sin esta variable, no carga scripts externos de ElevenLabs.
 
 El webhook recibe `nombre`, `empresa`, `email`, `objetivo`, `mensaje`, `source` y `receivedAt`. Se conservó `POST /api/contact`. Valida tipos, campos, longitudes, email y objetivo. No registra el contenido en consola. Un rechazo, error de red o timeout produce 502; el formulario conserva lo escrito. Solo una respuesta HTTP satisfactoria del webhook permite mostrar envío confirmado. El endpoint tiene timeout de 10 segundos.
@@ -46,11 +46,11 @@ La API confirma aceptación por el destino configurado, no lectura por una perso
 
 ## Sistema visual
 
-- Fondo `#080e14`; superficies `#0c141d` y `#101c27`.
-- Texto `#eff3f4`; secundario `#9baab5`; acento `#75deed`.
+- Fondo `#111111`; superficies `#1c1c1c` y `#292929`.
+- Texto blanco, secundario gris y acento amarillo `#ffff00`.
 - Inter para cuerpo/UI y Space Grotesk para titulares, con `next/font`.
 - Tipografía editorial, líneas estructurales, bordes discretos y una sección clara para las decisiones de negocio.
-- Las dos imágenes originales del logo se conservan sin modificaciones; se presenta el PNG original con proporción y transparencia intactas.
+- Los SVG de identidad en `public/branding` se usan sin modificar ni distorsionar.
 - Movimiento CSS/SVG finito, activado con los cambios de prioridad. Se respeta `prefers-reduced-motion` y el contenido no depende de animaciones para verse.
 
 ## Componentes
@@ -64,9 +64,9 @@ En `components/visuals/`:
 - `CapabilityExplorer`: disclosures nativos accesibles con disciplinas y preguntas de negocio.
 - `BusinessExplorer`: selección de seis frentes de decisión.
 - `OperatingCycle`: siete etapas con resultado por ciclo.
-- `CapabilityCompound`: progresión conceptual de capacidad acumulada.
+- `CapabilityCompound`: ciclo de cuatro etapas alrededor del contexto compartido.
 
-Se eliminaron las secciones antiguas, testimonios y nombres de ejemplo. Los escenarios publicados se identifican expresamente como ilustrativos. No hay cifras comerciales, promesas cuantitativas ni clientes atribuidos sin evidencia.
+Los escenarios publicados se identifican expresamente como ilustrativos. Los precios mensuales de los cuatro planes definidos se publican en `/planes`; Enterprise se cotiza a medida. No se atribuyen resultados ni clientes sin evidencia.
 
 ## Verificación del contacto
 

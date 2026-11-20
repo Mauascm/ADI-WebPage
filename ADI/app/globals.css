@@ -800,40 +800,6 @@ h2 > span {
 .continuity-grid .text-link {
   margin-top: 24px;
 }
-.compound {
-  border-left: 1px solid #5b5b5b;
-  padding-left: 28px;
-}
-.compound-row {
-  margin-bottom: 22px;
-}
-.compound-row > .micro {
-  font-size: 9px;
-}
-.compound-bar {
-  border: 1px solid #4e4e4e;
-  background: linear-gradient(90deg, #272727, #161616);
-  min-width: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 14px;
-  margin-top: 7px;
-  font-size: 11px;
-  color: #dadada;
-}
-.compound-bar > span:last-child {
-  color: var(--accent);
-}
-.compound-row:last-of-type .compound-bar {
-  border-color: #9f9f9f;
-  background: #313131;
-}
-.compound-row p {
-  font-size: 11px;
-  color: var(--muted);
-  margin-top: 5px;
-}
 .figure-note {
   font-size: 10px;
   color: var(--muted);
@@ -1778,9 +1744,6 @@ h2 > span {
   .continuity-grid {
     gap: 35px;
   }
-  .compound {
-    padding-left: 18px;
-  }
   .team-comparison h3 {
     font-size: 25px;
   }
@@ -2175,20 +2138,6 @@ h2 > span {
   .continuity-grid {
     grid-template-columns: 1fr;
     gap: 40px;
-  }
-  .compound {
-    padding-left: 18px;
-  }
-  .compound-bar {
-    min-width: 190px;
-    padding: 12px;
-    font-size: 10px;
-  }
-  .compound-row > p {
-    font-size: 10px;
-  }
-  .compound .figure-note {
-    font-size: 9px;
   }
   .capability-item summary {
     grid-template-columns: 25px 1fr 20px;
@@ -2940,20 +2889,8 @@ h2 > span {
   box-shadow: inset 0 3px var(--accent);
 }
 .adi-team li svg,
-.compound-bar > span:last-child,
 .cycle-baseline > svg {
   color: var(--accent);
-}
-.compound {
-  border-left-color: var(--accent);
-}
-.compound-bar {
-  border-color: #515151;
-  background: #232323;
-}
-.compound-row:last-of-type .compound-bar {
-  border-color: var(--accent);
-  background: #303015;
 }
 .segmented {
   border-radius: 0;
@@ -3214,4 +3151,156 @@ h2 > span {
 @media (prefers-reduced-motion: reduce) {
   .plans-preview-link { transition: none; }
   .plans-preview-link:hover { transform: none; }
+}
+
+/* A cycle makes the reusable context between initiatives visible. */
+.continuity-cycle.compound {
+  position: relative;
+  width: min(100%, 560px);
+  aspect-ratio: 1;
+  margin: 0 auto 28px;
+  padding: 0;
+  border: 0;
+  isolation: isolate;
+}
+.continuity-cycle-track {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  color: var(--accent);
+  opacity: .85;
+}
+.continuity-cycle-track .continuity-cycle-ring {
+  fill: none;
+  stroke: #ffff0028;
+  stroke-width: 1;
+  stroke-dasharray: 4 7;
+}
+.continuity-cycle-track > path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-dasharray: 275;
+  animation: cycle-draw 1.4s ease-out both;
+}
+.continuity-cycle-track > path:nth-of-type(2) { animation-delay: .2s; }
+.continuity-cycle-track > path:nth-of-type(3) { animation-delay: .4s; }
+.continuity-cycle-track > path:nth-of-type(4) { animation-delay: .6s; }
+.continuity-cycle-center {
+  position: absolute;
+  top: 32%;
+  left: 32%;
+  width: 36%;
+  height: 36%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+  padding: 17px;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  background: #242414;
+  text-align: center;
+  box-shadow: 0 0 0 12px #ffff0008, 0 0 50px #ffff0012;
+}
+.continuity-cycle-center .micro { color: var(--accent); font-size: 8px; }
+.continuity-cycle-center strong { font-family: var(--font-space-grotesk), Arial, sans-serif; font-size: clamp(17px, 1.5vw, 22px); line-height: 1.12; font-weight: 500; }
+.continuity-cycle-loop { color: var(--accent); font-size: 22px; line-height: 1; }
+.continuity-cycle-stage {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  width: 42%;
+  min-height: 22%;
+  padding: clamp(13px, 1.7vw, 20px);
+  border: 1px solid #595959;
+  background: #222;
+  transition: border-color .25s ease, transform .25s ease, background .25s ease;
+}
+.continuity-cycle-stage:hover { border-color: var(--accent); background: #30301d; transform: translateY(-4px); }
+.continuity-cycle-stage .micro { color: var(--accent); font-size: 8px; }
+.continuity-cycle-stage strong { margin-top: 8px; font-family: var(--font-space-grotesk), Arial, sans-serif; font-size: clamp(15px, 1.4vw, 20px); line-height: 1.15; font-weight: 500; }
+.continuity-cycle-stage p { margin-top: 6px; color: #bdbdbd; font-size: clamp(10px, .9vw, 12px); line-height: 1.4; }
+.continuity-cycle-stage-1 { top: 0; left: 0; }
+.continuity-cycle-stage-2 { top: 0; right: 0; }
+.continuity-cycle-stage-3 { bottom: 0; right: 0; }
+.continuity-cycle-stage-4 { bottom: 0; left: 0; border-color: #77772d; background: #2b2b1a; }
+.continuity-cycle .compound-note { position: absolute; bottom: -27px; left: 0; width: 100%; text-align: center; font-size: 10px; }
+@keyframes cycle-draw { from { stroke-dashoffset: 275; opacity: .2; } to { stroke-dashoffset: 0; opacity: 1; } }
+
+/* Four business signals, kept as a square on desktop and phones. */
+.fit-quadrants {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: min(100%, 540px);
+  aspect-ratio: 1;
+  border: 1px solid #666;
+  background: #1b1b1b;
+}
+.fit-quadrants > div {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(14px, 2vw, 25px);
+  border-right: 1px solid #555;
+  border-bottom: 1px solid #555;
+  transition: background .25s ease;
+}
+.fit-quadrants > div:nth-child(even) { border-right: 0; }
+.fit-quadrants > div:nth-child(n+3) { border-bottom: 0; }
+.fit-quadrants > div:hover { background: #303019; }
+.fit-quadrants .micro { color: var(--accent); font-size: 9px; }
+.fit-quadrants strong { margin-top: auto; font-family: var(--font-space-grotesk), Arial, sans-serif; font-size: clamp(17px, 1.65vw, 23px); font-weight: 500; line-height: 1.1; letter-spacing: -.04em; }
+.fit-quadrants p { margin-top: 11px; color: #c8c8c8; font-size: clamp(11px, 1vw, 13px); line-height: 1.45; }
+.calendar-booking {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  width: 100%;
+  max-width: 460px;
+  margin-top: 28px;
+  padding: 18px 20px;
+  border: 1px solid var(--accent);
+  background: #30301c;
+  color: var(--accent);
+  transition: background .2s ease, transform .2s ease;
+}
+.calendar-booking:hover { background: #3d3d1b; transform: translateY(-3px); }
+.calendar-booking > svg:first-child { flex: none; }
+.calendar-booking > svg:last-child { flex: none; margin-left: auto; }
+.calendar-booking span { display: flex; flex-direction: column; gap: 3px; }
+.calendar-booking strong { font-size: 14px; }
+.calendar-booking small { color: #d4d4d4; font-size: 11px; }
+@media (max-width: 767px) {
+  .continuity-cycle.compound { max-width: 500px; margin-bottom: 32px; }
+  .continuity-cycle-center { padding: 10px; gap: 4px; }
+  .continuity-cycle-center .micro { font-size: 6px; }
+  .continuity-cycle-center strong { font-size: clamp(12px, 3.5vw, 17px); }
+  .continuity-cycle-loop { font-size: 16px; }
+  .continuity-cycle-stage { padding: clamp(8px, 2.4vw, 15px); min-height: 24%; }
+  .continuity-cycle-stage .micro { font-size: 6px; }
+  .continuity-cycle-stage strong { margin-top: 4px; font-size: clamp(11px, 3.1vw, 16px); }
+  .continuity-cycle-stage p { margin-top: 4px; font-size: clamp(8px, 2.45vw, 11px); }
+  .fit-quadrants { width: 100%; }
+  .fit-quadrants > div { padding: clamp(11px, 3vw, 20px); }
+  .fit-quadrants strong { font-size: clamp(15px, 4.2vw, 21px); }
+  .fit-quadrants p { font-size: clamp(10px, 3vw, 13px); }
+  .calendar-booking { max-width: none; padding: 16px; }
+}
+@media (max-width: 389px) {
+  .continuity-cycle-stage p { display: none; }
+  .fit-quadrants .micro { font-size: 7px; }
+  .fit-quadrants strong { font-size: 14px; }
+  .fit-quadrants p { font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .continuity-cycle-track > path { animation: none; stroke-dashoffset: 0; }
+  .continuity-cycle-stage, .fit-quadrants > div { transition: none; }
+  .continuity-cycle-stage:hover { transform: none; }
+  .calendar-booking { transition: none; }
+  .calendar-booking:hover { transform: none; }
 }

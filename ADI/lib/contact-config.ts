@@ -1,7 +1,7 @@
 export const contactConfig = {
   email: "contacto@adi-mx.com",
-  // Ejemplo: "https://cal.com/adi/diagnostico" o URL de Calendly.
-  calendarUrl: process.env.NEXT_PUBLIC_ADI_CALENDAR_URL ?? "",
+  // URL pública de la página de reservas creada en Google Calendar.
+  calendarUrl: process.env.NEXT_PUBLIC_ADI_CALENDAR_URL?.trim() ?? "",
 };
 
 export const contactMailto = `mailto:${contactConfig.email}`;

@@ -13,15 +13,16 @@ Core message: Tu equipo de Datos + IA. Sin construirlo desde cero.
 CTA: Conversemos sobre tu primera prioridad.
 AI principle: La IA es una capa de capacidad. No un punto de partida obligatorio.
 
-LOGO: Both original files in public/branding are immutable. Never redraw, recolor, distort, crop or regenerate the logo.
+LOGO: Use the existing SVG identity files in public/branding. Never redraw, recolor, distort, crop or regenerate the logo.
 
 VISUAL SYSTEM
-Background #080e14. Surfaces #0c141d / #101c27.
-Primary text #eff3f4. Secondary text #9baab5. Cyan #75deed.
-Business section #e9eeec with dark text #14232a.
+Background #111111. Surfaces #1c1c1c / #292929.
+Primary text white. Secondary text gray. Yellow accent #ffff00.
+Business section #f2f2ef with dark text #222222.
 Inter for body/UI; Space Grotesk for display. Large editorial type, generous spacing, thin structural lines, minimal radius. Diagrams explain systems; no decorative orbs, stock imagery or generic dashboards.
 
 SIGNATURE: A responsive interactive system showing company information → ADI capability → business decision. Priority selectors change the sources, relevant disciplines and decision. Motion is restrained, finite and respects reduced-motion preferences.
 
-CONTENT SOURCE OF TRUTH: lib/site-content.ts; components/sections/office-story.tsx; app/globals.css.
+CONTENT SOURCE OF TRUTH: lib/site-content.ts; lib/plans-content.ts; components/sections/office-story.tsx; app/globals.css.
 Published scenarios are illustrative applications, not verified customer case studies. Do not convert them into client claims.
+Published monthly Data & AI Office prices: Essential 70,000; Growth 135,000; Intelligence 219,000; AI 319,000 MXN plus VAT. Enterprise is priced to scope. Automation begins in Essential; advanced analytics begins in Growth.

@@ -1,6 +1,5 @@
 import { PageIntro, Eyebrow } from "@/components/ui/editorial";
 import { OperatingCycle } from "@/components/visuals/operating-cycle";
-import { CapabilityCompound } from "@/components/visuals/capability-compound";
 import { CTASection } from "@/components/sections/cta-section";
 import { buildMetadata } from "@/lib/metadata";
 export const metadata = buildMetadata({
@@ -66,28 +65,6 @@ export default function ModelPage() {
               <p>{text}</p>
             </article>
           ))}
-        </div>
-      </section>
-      <section className="section section-tinted">
-        <div className="wrap continuity-grid">
-          <div>
-            <Eyebrow>EL EFECTO ACUMULADO</Eyebrow>
-            <h2>
-              El siguiente paso
-              <br />
-              no empieza de cero.
-            </h2>
-            <p className="lead">
-              La primera iniciativa descubre fuentes y reglas. Las siguientes
-              pueden reutilizar integraciones, definiciones y arquitectura.
-            </p>
-            <p className="body-copy">
-              El conocimiento se documenta, se comparte y evoluciona. Así
-              reducimos la dependencia de personas individuales y preservamos
-              contexto entre iniciativas.
-            </p>
-          </div>
-          <CapabilityCompound />
         </div>
       </section>
       <section className="section wrap faq">
